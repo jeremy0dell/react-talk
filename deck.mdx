@@ -1,0 +1,271 @@
+import { Head } from 'mdx-deck'
+import { Appear } from 'mdx-deck'
+
+import 'style-loader!css-loader!codemirror/lib/codemirror.css'
+import 'style-loader!css-loader!./cm-night-owl.css'
+import 'style-loader!css-loader!./styles.css'
+import 'codemirror/mode/javascript/javascript'
+import 'codemirror/mode/jsx/jsx'
+import {CodeBlock} from './JS/code-block'
+import Logger from './JS/logger'
+
+export {default as theme} from './theme'
+
+## What is React?
+<Appear>
+<div><div style={{ marginTop: 80 }}>React is a DOM manipulation library developed by Facebook</div></div>
+<div><div style={{ marginTop: 80 }}>React is being able to intersperse JS, HTML, and CSS seamlessly</div></div>
+<div><div style={{ marginTop: 80 }}>React is permanent job security for the rest of eternity</div></div>
+</Appear>
+
+---
+<div>
+<Appear>
+<div><div style={{ fontSize: 30 ,marginBottom: 50}}>Why React?</div></div>
+
+<div style={{ fontSize: 30 }}>
+  <div style={{ display: 'flex', flexDirection: 'space-between' }}>
+  <CodeBlock>{`<ul
+  class="error-messages"
+  *ngIf="errorList">
+  <li *ngFor="let error of errorList">
+    {{ error }}
+  </li>
+</ul>`}</CodeBlock>
+
+  <CodeBlock>{`errorList ?
+  <ul className="error-messages">
+    {errorList.map(error =>
+      <li key={error.key}>
+        {error}
+      </li)}
+  </ul> :
+  // Something else
+`}</CodeBlock>
+  </div>
+</div>
+<div><div>
+  <CodeBlock>{`// Imports at top of the file
+const PaddedContainer = styled(Container)\`
+  padding-top: 30px;
+  padding-bottom: 30px;
+\`\n
+<DataProvider>
+  {({ data, user }) => <PaddedContainer>
+    <Nav user={user.name}/>
+    <Dashboard dataProp={...data}/>
+    <Footer />
+  </PaddedContainer>}
+</DataProvider>`}</CodeBlock>
+</div></div>
+</Appear>
+</div>
+
+```notes
+- React is Declarative
+- React is infinitely modular and creating modular components is very easy
+```
+---
+
+## React Basics
+<Appear>
+<img style={{ height: 300 }}
+src="https://i.imgflip.com/2j1bos.jpg"
+/>
+</Appear>
+
+####
+```notes
+- Conceptually, components are like JavaScript functions. They accept arbitrary inputs (called “props”) and return a special kind of markup called JSX which is a powerful tool, combining HTML and Javascript to describe what should show up on a page
+```
+---
+
+### Types of Components
+<div>
+  <Appear>
+  <div><div style={{ display: 'flex', justifyContent: 'space-around' }}>
+    <div>Functional</div>
+    <div>Stateful</div>
+  </div></div>
+  <div><div style={{ display: 'flex', justifyContent: 'space-between' }}>
+    <div><CodeBlock>{` const MyComponent = props =>
+
+  <div style={props.styles}>
+    <Title value={props.title} />
+    <div style={{ padding: 10 }}>
+      My name is: {props.name}
+    </div>
+    <StyledButton
+      text="Submit"
+      onClick={() => props.handleSubmit(props.name)}
+    />
+    <StyledButton
+      text="Exit"
+      onClick={props.handleExitClick}
+    />
+  </div>
+`}</CodeBlock></div>
+  <CodeBlock>{`class StateComponent extends React.Component {
+  state = {
+    nameForm: '',
+    counter: 0,
+    todos: {}
+  }\n
+  componentDidMount() {
+    fetch(\`https://my-remote-endpoint.biz/todos/\${localStorage.name}\`)
+      .then(res => this.setState({ todos: res.data.todos }))
+  }\n
+  updateCounter = () => {
+    this.setState({ counter: this.state.counter + 1 })
+  }
+  updateName = e => {
+    this.setState({ nameForm: e.target.value })
+  }\n
+  render() {
+    return (
+      // JSX code goes here
+      // I just don't want to take up too much space on the page
+    )
+  }
+}`}</CodeBlock>
+  </div></div>
+  </Appear>
+</div>
+
+---
+
+<CodeBlock style={{ fontSize: 20 }}>{`const Accordion = ({items, ...props}) =>
+  <BaseAccordion {...props}>
+    {({openIndexes, handleItemClick}) => (
+      <div>
+        {items.map((item, index) => (
+          <AccordionItem key={item.title} direction="vertical">
+            <AccordionButton
+              isOpen={openIndexes.includes(index)}
+              onClick={() => handleItemClick(index)}
+            >
+              {item.title}{' '}
+              <span>{openIndexes.includes(index) ? '👇' : '👈'}</span>
+            </AccordionButton>
+            <AccordionContents isOpen={openIndexes.includes(index)}>
+              {item.contents}
+            </AccordionContents>
+          </AccordionItem>
+        ))}
+      </div>
+    )}
+  </BaseAccordion>`}</CodeBlock>
+
+---
+
+## Let's take a look at some basic React
+## Code ↓ ------------- Render ↓
+<div style={{ display: 'flex', justifyContent: 'space-between' }}>
+  <CodeBlock>
+  {`<CodeBlock style={{
+    fontSize: 26,
+    fontStyle: 'oblique'
+  }}>
+  {\`<h1>My code goes here!</h1>\`}
+</CodeBlock>`}
+</CodeBlock>
+
+<CodeBlock style={{ marginTop: 26, fontSize: 26, fontStyle: 'oblique' }}>{`<h1>My code goes here!</h1>`}</CodeBlock>
+
+</div>
+
+
+<Appear>
+Now let's look at the CodeBlock Component
+<CodeBlock>{`import React from 'react'
+import {UnControlled as CodeMirror} from 'react-codemirror2'
+\nexport const CodeBlock = ({children, options = {}, style, ...props}) => (
+  <div style={{fontSize: 18, overflow: 'scroll', ...style}}>
+    <CodeMirror
+      value={children}
+      options={{
+        mode: 'jsx',
+        theme: 'night-owl',
+        lineNumbers: false,
+        readOnly: 'nocursor',
+        ...options,
+      }}
+      {...props}
+    />
+  </div>
+)`}</CodeBlock>
+</Appear>
+
+```notes
+- Create speaker notes in fenced code blocks
+```
+
+---
+
+Higher-Order Components
+
+<Appear>
+<CodeBlock>
+  {`const MyStyledComponent = HOCforStyling(MyBoringComponent)
+const MyStyledAsyncComponent = HOCforAsync(MyStyledComponent)`}
+</CodeBlock>
+OR
+<CodeBlock>
+{`const MyStyledAsyncComponent = HOCforAsync(HOCforStyling(MyBoringComponent))`}</CodeBlock>
+OR
+<CodeBlock>{`
+const makeStyledAndAsyc = compose(
+  HOCforAsync,
+  HOCforStyling
+)
+const MyStyledAsyncComponent = makeStyledAndAsyc(MyBoringComponent)`}
+</CodeBlock>
+
+
+</Appear>
+
+```notes
+- This is a function that wraps a component and returns a new component
+```
+
+---
+
+<CodeBlock>{`function someHOC(WrappedComponent) {
+  return class extends React.Component {
+    state = {
+      // Do you want your HOC to enhance a component with state?
+    }\n
+    componentDidMount() { // How about a lifecycle method? }\n
+    someMethod = () => // or pass down a method?\n
+    render() {
+      return (
+        <WrappedComponent
+          extraState={this.state}
+          extraMethod={this.someMethod}
+        />
+      )
+    }
+  }
+}\n\n
+const EnhancedComponent = someHOC(BoringComponent)`}</CodeBlock>
+
+---
+
+## Render props
+### Revenge of the Bearded Hipsters
+
+---
+
+<CodeBlock style={{ fontSize: 30 }}>{`<MyComponent>
+  {/* Anything between these
+    component tags will be part
+    of the component's children prop */}
+</MyComponent>\n
+<MyComponent>
+  <div>This is MyComponent's first child</div>
+  <div>This is MyComponent's second child</div>
+</MyComponent>`}</CodeBlock>
+
+---
+
+<CodeBlock>{``}</CodeBlock>
