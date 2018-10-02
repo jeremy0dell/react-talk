@@ -8,6 +8,8 @@ import 'codemirror/mode/javascript/javascript'
 import 'codemirror/mode/jsx/jsx'
 import {CodeBlock} from './JS/code-block'
 import Logger from './JS/logger'
+import MyComponent, {SecondComponent} from './JS/MyComponent'
+import { Split } from 'mdx-deck/layouts'
 
 export {default as theme} from './theme'
 
@@ -242,6 +244,7 @@ const MyStyledAsyncComponent = makeStyledAndAsyc(MyBoringComponent)`}
         <WrappedComponent
           extraState={this.state}
           extraMethod={this.someMethod}
+          {...props} // to pass down props from other composed Components
         />
       )
     }
@@ -255,17 +258,132 @@ const EnhancedComponent = someHOC(BoringComponent)`}</CodeBlock>
 ### Revenge of the Bearded Hipsters
 
 ---
+export default Split
 
-<CodeBlock style={{ fontSize: 30 }}>{`<MyComponent>
-  {/* Anything between these
-    component tags will be part
-    of the component's children prop */}
-</MyComponent>\n
+<div><div style={{ fontSize: 46 }}>
+  The "Perils" of HOCS
+  <CodeBlock>{`export default compose(
+  withRouter,
+  formData({
+    product: 0,
+    recipientType: 'Manufacturer',
+    email: '', itemsSelected: []
+  }),
+  getProducts,
+  connect(null, { removeItemFromState }),
+)(ManufacturerTransfer)`}</CodeBlock>
+</div></div>
+
+<CodeBlock options={{ lineNumbers: true }} style={{ fontSize: 18 }}>{`const ManufacturerTransfer = ({
+  user, history, form, // 😡😡😡 THIS IS HEINOUS 😡😡😡
+  updateState, products, handleChange,
+  handleProductDropdown, handleCheckboxEvent, removeItemFromState,
+}) =>
+  <div>
+    <Button />
+    <div style={styles.transferContainer}>
+      <div style={styles.boxShadowTransfer}>
+        <div style={styles.transferTitle}>Transfer Solerus Certificates</div>
+        <Dropdown form={form} products={products} handleProductDropdown={handleProductDropdown} />
+        <Table
+          user={user}
+          selectedProduct={form.product}
+          itemsSelected={form.itemsSelected}
+          products={products.list}
+          handleCheckboxEvent={handleCheckboxEvent}
+        />
+        <Input
+          form={form}
+          updateState={updateState}
+          handleChange={handleChange}
+        />
+        <div // eslint-disable-line
+          style={body.transferForm}
+          onClick={() => {
+            const submitObj = {
+              user, // Wait, where does user come from???
+              type: form.recipientType,
+              items: user.ownership.filter(item => item.product === products.list[form.product]._id)
+              .filter((item, idx) => includes(form.itemsSelected, idx)),
+              email: form.email,
+            }
+            axios.post(\`/manu\${MANUFACTURER_TRANSFER}\`, submitObj)
+            .then((res) => {
+              res.data.items.forEach(itm => removeItemFromState(itm._id))
+              history.push('/manufacturer')
+            })
+          }}
+        />
+      </div>
+    </div>
+  </div>`}</CodeBlock>
+
+---
+
+<CodeBlock style={{ fontSize: 30 }}>{`const MyComponent = ({ children }) =>
+  <React.Fragment>
+    { console.log(children) }
+  </React.Fragment>\n
 <MyComponent>
   <div>This is MyComponent's first child</div>
   <div>This is MyComponent's second child</div>
 </MyComponent>`}</CodeBlock>
 
+<MyComponent>
+  <div>This is MyComponent's first child</div>
+  <div>This is MyComponent's second child</div>
+</MyComponent>
 ---
 
-<CodeBlock>{``}</CodeBlock>
+<CodeBlock>{`const ProviderComponent = ({ render }) => render({
+    name: 'Jeremy',
+    company: 'Slalom',
+    rating: 10
+  })\n
+<ProviderComponent render={({name, company, rating}) =>
+  <div>
+    My name is {name} and I would rate {company} as a {rating} out of 10
+  </div>}
+/>`}</CodeBlock>
+<Appear>
+<div>Renders:</div>
+<div>My name is Jeremy and I would rate Slalom as a 10 out of 10</div>
+</Appear>
+
+---
+<div><div style={{ fontSize: 40 }}>Do render props cause callback hell?</div></div>
+<Appear>
+<CodeBlock>{`const verifyUser = function(username, password, callback){
+   dataBase.verifyUser(username, password, (error, userInfo) => {
+       if (error) {
+           callback(error)
+       } else {
+           dataBase.getRoles(username, (error, roles) => {
+               if (error) {
+                   callback(error)
+               } else {
+                   dataBase.logAccess(username, (error) => {
+                       if (error) {
+                           callback(error);
+                       } else {
+                           callback(null, userInfo, roles);
+                       }
+                   })
+               }
+           })
+       }
+   })
+};`}</CodeBlock>
+<CodeBlock>{`<ProviderComponent render={({name, company, rating}) =>
+  <SecondProviderComponent render={({ someMethod, someObject }) =>
+    <ThirdProviderComponent render={({ bottomText }) =>
+      <div>
+        My name is {name} and I would rate {company} as a {rating} out of 10
+        <button onClick={someMethod} />
+        <Text value={bottomText} />
+      </div>
+    } />
+  } />
+} />`}</CodeBlock>
+<div><div style={{ fontSize: 40 }}>So basically yes, they can</div></div>
+</Appear>
