@@ -13,17 +13,33 @@ import { Split } from 'mdx-deck/layouts'
 
 export {default as theme} from './theme'
 
+Hi, my name is Jeremy and I'm a little nervous
+
+Anyways, let's talk about React
+
+---
+
 ## What is React?
 <Appear>
 <div><div style={{ marginTop: 80 }}>React is a DOM manipulation library developed by Facebook</div></div>
 <div><div style={{ marginTop: 80 }}>React is being able to intersperse JS, HTML, and CSS seamlessly</div></div>
+<CodeBlock>{`function Component {
+  return <div>{Math.random() > 0.5 ? 'Over' : 'Under'}</div>
+}`}</CodeBlock>
+<div><div style={{ marginTop: 15 }}>React is as simple or as complex as you want to make it</div></div>
 <div><div style={{ marginTop: 80 }}>React is permanent job security for the rest of eternity</div></div>
 </Appear>
 
+```notes
+- 1. Not really much to say about this. React was initially released by Facebook five years ago and has since taken the web dev community by storm. It's MIT licensed and maintained by React engineers and the community at large
+- 2. React makes use of a great markup-like syntax called JSX. Although not required, this is part of the beauty of React code. It's a little hard to explain, so here is an example.
+- 3. React is really good at being declarative and being composable. Because of this, components can be put to many novel uses and components can be infinitely nested within eachother. In this talk I'm going to go over a few of the hottest react design patterns so hopefully you can see this demonstrated a bit later
+- 4. React has had a meteoric rise since it's conception and it keeps getting more and more popular. Job listings, library downloads, and github stars are getting higher and higher every year. I know that many schools including dartmouth are teaching web dev classes in React and many into to programming courses are taught in javascript. There are many reasons for this, but it's pervasivness is undeniable.
+```
 ---
 <div>
 <Appear>
-<div><div style={{ fontSize: 30 ,marginBottom: 50}}>Why React?</div></div>
+<div><div style={{ fontSize: 30, marginBottom: 50}}>Why React?</div></div>
 
 <div style={{ fontSize: 30 }}>
   <div style={{ display: 'flex', flexDirection: 'space-between' }}>
@@ -64,9 +80,37 @@ const PaddedContainer = styled(Container)\`
 </div>
 
 ```notes
+- On the left we have a tiny piece of a template you would see in angular, and on the right some React code. First of all, this is a code example of using JSX. Between the <ul> tags we have some javascript that maps through errorList and renders list elements.
+- I find this to be more declarative than the angular version, because it describes the flow, more than it does explicitly say what we want to happen. Riff about angular sucking
 - React is Declarative
 - React is infinitely modular and creating modular components is very easy
+- Explain the block of code. The styled() function adds styles to the Container component, the DataProvider allows us to render jsx with some state, the inner components make use of those props. again, this demonstrates
 ```
+---
+A quick note about the nature of Javascript
+<Appear>
+<CodeBlock>{`function giveMeAFunctionThatBeepsANumber(x){
+  return function (y) {
+    alert('Beep ' + (x + y));
+  }
+}\n
+var beeper = giveMeAFunctionThatBeeps(2)\n
+<button onClick={() => beeper(10)}>Click me!</button>
+`}</CodeBlock>
+<div><button style={{ height: 30 }} onClick={() => alert(12)}>Click me!</button></div>
+<CodeBlock>{`var curry = (fn,arity = fn.length,nextCurried) =>
+  (nextCurried = prevArgs =>
+    nextArg => {
+      var args = [ ...prevArgs, nextArg ];\n
+      if (args.length >= arity) {
+        return fn( ...args );
+      }
+      else {
+        return nextCurried( args );
+      }
+    }
+  )( [] );`}</CodeBlock>
+</Appear>
 ---
 
 ## React Basics
@@ -74,11 +118,28 @@ const PaddedContainer = styled(Container)\`
 <img style={{ height: 300 }}
 src="https://i.imgflip.com/2j1bos.jpg"
 />
+Also Props
+<div><div style={{ display: 'flex', justifyContent: 'space-between' }}>
+  <CodeBlock>{`function ES5Component(props) {
+  return (
+    <div style={props.styles}>
+      <Content data={props.data} />
+      <Toolbar currUser={props.user} />
+    </div>
+  )
+}`}</CodeBlock>
+  <CodeBlock>{`const ES6Component = ({ styles, data, user }) =>
+  <div style={styles}>
+    <Content data={data} />
+    <Toolbar currUser={user} />
+  </div>`}</CodeBlock>
+</div></div>
 </Appear>
 
 ####
 ```notes
-- Conceptually, components are like JavaScript functions. They accept arbitrary inputs (called “props”) and return a special kind of markup called JSX which is a powerful tool, combining HTML and Javascript to describe what should show up on a page
+- You've already seen a little bit of this, BUT  -> Conceptually, components are like JavaScript functions. They accept arbitrary inputs (called “props”) and return a special kind of markup called JSX which is a powerful tool, combining HTML and Javascript to describe what should show up on a page
+--
 ```
 ---
 
