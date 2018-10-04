@@ -180,7 +180,7 @@ Also Props
     <div>Stateful</div>
   </div></div>
   <div><div style={{ display: 'flex', justifyContent: 'space-between' }}>
-    <div><CodeBlock>{` const MyComponent = props =>
+    <div><CodeBlock style={{ fontSize: 22 }}>{` const MyComponent = props =>
 
   <div style={props.styles}>
     <Title value={props.title} />
@@ -197,7 +197,7 @@ Also Props
     />
   </div>
 `}</CodeBlock></div>
-  <CodeBlock>{`class StateComponent extends React.Component {
+  <CodeBlock style={{ fontSize: 22 }}>{`class StateComponent extends React.Component {
   state = {
     nameForm: '',
     counter: 0,
@@ -223,6 +223,7 @@ Also Props
   </div></div>
   </Appear>
 </div>
+
 ```notes
 - There are actually two types of components in React
 - CLICK SLIDE
@@ -231,12 +232,13 @@ Also Props
 - on the Left we have a functional component, much like the few components we've already seen defined in this talk, they look like regular fat arrow Javascript functions
 - on the right we have a component which uses the syntax of an ES6 class. this component is more involved because it can have state, it has lifecycle methods which are functions that execute when the component is rendered, updates, or taken off the page. Furthermore we can define our own methods that manipulate the state of the component
 ```
+
 ---
 Props
 
 <div style={{ display: 'flex' }}>
 <Appear>
-<CodeBlock>{`class App extends React.Component {
+<div><CodeBlock style={{ fontSize: 21 }}>{`class App extends React.Component {
   state = {
     word: '',
     wordList: []
@@ -264,8 +266,8 @@ Props
       </div>
     )
   }
-}`}</CodeBlock>
-<div><CodeBlock>{`const WordList = ({ words }) =>
+}`}</CodeBlock></div>
+<div><CodeBlock style={{ fontSize: 21 }}>{`const WordList = ({ words }) =>
   <div>
     <div>This is the list!</div>
     {words.map(word =>
@@ -274,7 +276,7 @@ Props
       </div>)}
   </div>
 `}</CodeBlock>
-<CodeBlock>{`const Form = ({ word, handleChange, handleSubmit }) =>
+<CodeBlock style={{ fontSize: 21 }}>{`const Form = ({ word, handleChange, handleSubmit }) =>
   <div>
     <input
       value={word}
@@ -310,10 +312,9 @@ Props
 ```
 ---
 
-### Nested Components
 #### Code ↓ --------------------- Render ↓
 <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-  <CodeBlock style={{ fontSize: 18 }}>
+  <CodeBlock style={{ fontSize: 24 }}>
   {`<CodeBlock
   style={{
     fontSize: 26,
@@ -332,7 +333,7 @@ Props
 
 <Appear>
 Now let's look at the CodeBlock Component
-<CodeBlock>{`import {UnControlled as CodeMirror} from 'react-codemirror2'
+<div><CodeBlock style={{ fontSize: 21 }}>{`import {UnControlled as CodeMirror} from 'react-codemirror2'
 \nexport const CodeBlock = ({children, options = {}, style, ...props}) => (
   <div style={{fontSize: 18, overflow: 'scroll', ...style}}>
     <CodeMirror
@@ -347,7 +348,7 @@ Now let's look at the CodeBlock Component
       {...props}
     />
   </div>
-)`}</CodeBlock>
+)`}</CodeBlock></div>
 <a href="https://github.com/scniro/react-codemirror2/blob/master/src/index.tsx">https://github.com/scniro/react-codemirror2/blob/master/src/index.tsx</a>
 </Appear>
 
@@ -397,7 +398,7 @@ const MyStyledAsyncComponent = makeStyledAndAsyc(MyBoringComponent)`}
 
 ---
 
-<CodeBlock>{`function someHOC(WrappedComponent) {
+<CodeBlock style={{ fontSize: 25 }}>{`function someHOC(WrappedComponent) {
   return class extends React.Component {
     state = {
       // Do you want your HOC to enhance a component with state?
@@ -426,7 +427,7 @@ export default Split
 
 <div><div style={{ fontSize: 46 }}>
   The "Perils" of HOCS
-  <CodeBlock>{`export default compose(
+  <CodeBlock style={{ fontSize: 24 }}>{`export default compose(
   withRouter,
   formData({
     product: 0,
