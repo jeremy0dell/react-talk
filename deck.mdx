@@ -390,7 +390,9 @@ const MyStyledAsyncComponent = makeStyledAndAsyc(MyBoringComponent)`}
 - you might be finding yourself repeating code often if your're using only the basics, for example you might be using the same styles over and over again, or you might be repeatedly calling a certain endpoint when a component renders
 - luckily some *bearded hipsters* in san francisco found a solution, call High Order Components or HOCS
 - CLICK SLIDE
--
+- Essentially, a higher-order component is a function that takes a component and returns a new component.
+- They are reusable and stackable, you can wrap a HOC in a HOC like you see here
+- Personally I opt to use the 3rd option because I find it to be nice and declarative
 ```
 
 ---
@@ -415,11 +417,10 @@ const MyStyledAsyncComponent = makeStyledAndAsyc(MyBoringComponent)`}
 }\n\n
 const EnhancedComponent = someHOC(BoringComponent)`}</CodeBlock>
 
----
-
-## Render props
-### Revenge of the Bearded Hipsters
-
+```notes
+- This is what most HOCs will look like. a function that takes in a React Component as an argument and returns a Component from this
+- This is an example of a HOC that adds state to a Component, but HOCs can also add styles, the ability to do routing, and many more things
+```
 ---
 export default Split
 
@@ -481,24 +482,25 @@ export default Split
     </div>
   </div>`}</CodeBlock>
 
+```notes
+- unfortunately there are some potential downfalls to using HOCs
+- This is some code that I wrote for a personal project last winter. The component on the right is called ManufacturerTransfer and on the left you can see the four HOCs that I wrapped this component in
+- One problem that I brought onto myself is that I passed in 9 props to this component, this is too much and I could have compartmentalized it a little but it still illustrates some problems.
+- first of all, we know that those props at the top come from the HOCs on the left, but we don't know which prop comes from which higher order component. This is a problem because the code lacks separation of concerns,
+- also, what if two or more of those HOCs pass down a prop of the same name? one of them will get over written.
+```
 ---
 
-<CodeBlock style={{ fontSize: 30 }}>{`const MyComponent = ({ children }) =>
-  <React.Fragment>
-    { console.log(children) }
-  </React.Fragment>\n
-<MyComponent>
-  <div>This is MyComponent's first child</div>
-  <div>This is MyComponent's second child</div>
-</MyComponent>`}</CodeBlock>
+## Render props
+### Revenge of the Bearded Hipsters
 
-<MyComponent>
-  <div>This is MyComponent's first child</div>
-  <div>This is MyComponent's second child</div>
-</MyComponent>
+```notes
+- Luckily, the bearded hipsters in san francisco have blessed us with a potential solution that can replace HOCs called the render prop
+```
+
 ---
 
-<CodeBlock>{`const ProviderComponent = ({ render }) => render({
+<CodeBlock style={{ fontSize: 31 }}>{`const ProviderComponent = ({ render }) => render({
     name: 'Jeremy',
     adjective: 'favorite',
     food: 'ramen',
@@ -513,6 +515,12 @@ export default Split
 <div>My name is Jeremy and my favorite food is ramen</div>
 </Appear>
 
+```notes
+- Now we have a component that looks somewhat different. Instead of returning some HTML, this component returns the result of a function that gets passed down as prop
+- When we put this component to use we need to have a prop on it called render, which is a function that will return something to render
+- in this case the render method is called with some data, that is now available in this function
+
+```
 ---
 <div><div style={{ fontSize: 40 }}>Do render props cause callback hell?</div></div>
 <Appear>
@@ -549,4 +557,8 @@ export default Split
   } />
 } />`}</CodeBlock></div>
 <div><div style={{ fontSize: 40 }}>So basically yes, they can</div></div>
+<div><a href="https://github.com/facebook/react/issues/12664" style={{ fontSize: 40 }}>https://github.com/facebook/react/issues/12664</a></div>
 </Appear>
+
+---
+Questions?
