@@ -8,42 +8,55 @@ import 'codemirror/mode/javascript/javascript'
 import 'codemirror/mode/jsx/jsx'
 import {CodeBlock} from './JS/code-block'
 import Logger from './JS/logger'
+import App, { WordList, Form } from './JS/example/App'
 import MyComponent, {SecondComponent} from './JS/MyComponent'
 import { Split } from 'mdx-deck/layouts'
 
 export {default as theme} from './theme'
 
-Hi, my name is Jeremy and I'm a little nervous
 
-Anyways, let's talk about React
+<Appear>
+<h1>React for Smarties</h1>
 
+<div><h2>Hi, my name is Jeremy</h2></div>
+<h2>Anyways, let's talk about React</h2>
+</Appear>
+
+```notes
+- So, I titled this talk React for Smarties because, while this is intended to be an introduction to React, I think you're all very smart
+So I'm going to touch on more advanced concepts and design patterns in addition to the basics
+- By the way, I'm Jeremy. I've been a consultant here for about 6 months and I'm loving every day of it
+- So, let's get started
+```
 ---
 
 ## What is React?
 <Appear>
+<div><div style={{ marginTop: 80 }}>React is permanent job security for the rest of eternity</div></div>
 <div><div style={{ marginTop: 80 }}>React is a DOM manipulation library developed by Facebook</div></div>
 <div><div style={{ marginTop: 80 }}>React is being able to intersperse JS, HTML, and CSS seamlessly</div></div>
-<CodeBlock>{`function Component {
+<div><CodeBlock style={{ fontSize: 30 }}>{`function Component {
   return <div>{Math.random() > 0.5 ? 'Over' : 'Under'}</div>
-}`}</CodeBlock>
+}`}</CodeBlock></div>
 <div><div style={{ marginTop: 15 }}>React is as simple or as complex as you want to make it</div></div>
-<div><div style={{ marginTop: 80 }}>React is permanent job security for the rest of eternity</div></div>
 </Appear>
 
 ```notes
+- 4. React has had a meteoric rise since it's conception and it keeps getting more and more popular. Job listings, library downloads, and github stars are getting higher and higher every year. I know that many schools including dartmouth are teaching web dev classes in React and many into to programming courses are taught in javascript. There are many reasons for this, but it's pervasivness is undeniable.
+In case you're wondering what React *actually* is
 - 1. Not really much to say about this. React was initially released by Facebook five years ago and has since taken the web dev community by storm. It's MIT licensed and maintained by React engineers and the community at large
 - 2. React makes use of a great markup-like syntax called JSX. Although not required, this is part of the beauty of React code. It's a little hard to explain, so here is an example.
-- 3. React is really good at being declarative and being composable. Because of this, components can be put to many novel uses and components can be infinitely nested within eachother. In this talk I'm going to go over a few of the hottest react design patterns so hopefully you can see this demonstrated a bit later
-- 4. React has had a meteoric rise since it's conception and it keeps getting more and more popular. Job listings, library downloads, and github stars are getting higher and higher every year. I know that many schools including dartmouth are teaching web dev classes in React and many into to programming courses are taught in javascript. There are many reasons for this, but it's pervasivness is undeniable.
+- JSX allows us to pass around html like it's a javascript type and it lets us integrate javascript into html directly
+- 3. React is really good at being declarative and being composable. Because of this, components can be put to many novel uses (like handling routing and error handling) and components can be infinitely nested within eachother. Hopefully you'll be able to see this directly throughout this talk
 ```
 ---
 <div>
 <Appear>
-<div><div style={{ fontSize: 30, marginBottom: 50}}>Why React?</div></div>
+<div><div style={{ fontSize: 40, marginBottom: 50}}>Why React?</div></div>
 
 <div style={{ fontSize: 30 }}>
   <div style={{ display: 'flex', flexDirection: 'space-between' }}>
-  <CodeBlock>{`<ul
+  <CodeBlock style={{ fontSize: 30 }}>{`<ul
   class="error-messages"
   *ngIf="errorList">
   <li *ngFor="let error of errorList">
@@ -51,7 +64,7 @@ Anyways, let's talk about React
   </li>
 </ul>`}</CodeBlock>
 
-  <CodeBlock>{`errorList ?
+  <CodeBlock style={{ fontSize: 30 }}>{`errorList ?
   <ul className="error-messages">
     {errorList.map(error =>
       <li key={error.key}>
@@ -63,11 +76,7 @@ Anyways, let's talk about React
   </div>
 </div>
 <div><div>
-  <CodeBlock>{`// Imports at top of the file
-const PaddedContainer = styled(Container)\`
-  padding-top: 30px;
-  padding-bottom: 30px;
-\`\n
+  <CodeBlock style={{ fontSize: 30 }}>{`// Imports at top of the file
 <DataProvider>
   {({ data, user }) => <PaddedContainer>
     <Nav user={user.name}/>
@@ -80,25 +89,28 @@ const PaddedContainer = styled(Container)\`
 </div>
 
 ```notes
-- On the left we have a tiny piece of a template you would see in angular, and on the right some React code. First of all, this is a code example of using JSX. Between the <ul> tags we have some javascript that maps through errorList and renders list elements.
-- I find this to be more declarative than the angular version, because it describes the flow, more than it does explicitly say what we want to happen. Riff about angular sucking
-- React is Declarative
-- React is infinitely modular and creating modular components is very easy
-- Explain the block of code. The styled() function adds styles to the Container component, the DataProvider allows us to render jsx with some state, the inner components make use of those props. again, this demonstrates
+- On the left we have a tiny piece of a template you would see in angular, and on the right some React code.
+- Just to explain what's happening, on the left it's saying IF errorList exists, then render this code, which has a FOR loop
+- in the React code we're utilizing JSX to map through the errorList and render a <li> tag for every member of the list
+- I find this to be more declarative than the angular version, because it describes the flow, more than it does explicitly say what we want to happen.
+- On the other hand I find the angular template syntax to be quite ugly. I feel like "Thanks Google for letting me write a for loop and an if statement... Just let me write my own code!"
+- CHANGE SLIDE
+- Anyways, just to drive the point home about react being declarative, I want to show you some realistic React code
+- This piece of React code demonstrates what the coder wants the look to how like. The app is wrapped in a component that provides data, and has a few identifiable pieces, like a Nav bar, a Dashboard and a footer
 ```
 ---
 A quick note about the nature of Javascript
 <Appear>
-<CodeBlock>{`function giveMeAFunctionThatBeepsANumber(x){
+<div><CodeBlock style={{ fontSize: 26 }}>{`function giveMeAFunctionThatBeepsANumber(x){
   return function (y) {
     alert('Beep ' + (x + y));
   }
 }\n
 var beeper = giveMeAFunctionThatBeeps(2)\n
 <button onClick={() => beeper(10)}>Click me!</button>
-`}</CodeBlock>
-<div><button style={{ height: 30 }} onClick={() => alert(12)}>Click me!</button></div>
-<CodeBlock>{`var curry = (fn,arity = fn.length,nextCurried) =>
+`}</CodeBlock></div>
+<div><button style={{ height: 30 }} onClick={() => alert('Beep ' + 12)}>Click me!</button></div>
+<div><CodeBlock style={{ fontSize: 26 }}>{`var curry = (fn,arity = fn.length,nextCurried) =>
   (nextCurried = prevArgs =>
     nextArg => {
       var args = [ ...prevArgs, nextArg ];\n
@@ -109,8 +121,20 @@ var beeper = giveMeAFunctionThatBeeps(2)\n
         return nextCurried( args );
       }
     }
-  )( [] );`}</CodeBlock>
+  )( [] );`}</CodeBlock></div>
 </Appear>
+
+```notes
+  - Before I go on, I want to talk about the nature of Javascript as this language feature is essential to React development
+  - CLICK SLIDE
+  - In Javascript a function can return another function. Furthermore, the function that gets returned can access the arguments of the function that created it, and will have memory of those arguments
+  - Because of this, the following code is legal in React. You have a function which takes a number, that returns a function that also takes a number. That inner function will alert a mesage on the screen.
+  - CLICK SLIDE
+  - can someone tell me what will happen when I click this button?
+  - CLICK SLIDE
+  - Because of this, javascript allows for really cool functional programming like this curry function, which is a function, that returns a function, and in turn returns another function and is used often in functional programming.
+  - this isn't especially important, but I wanted to include it just because I think it's cool
+```
 ---
 
 ## React Basics
@@ -120,7 +144,7 @@ src="https://i.imgflip.com/2j1bos.jpg"
 />
 Also Props
 <div><div style={{ display: 'flex', justifyContent: 'space-between' }}>
-  <CodeBlock>{`function ES5Component(props) {
+  <CodeBlock style={{ fontSize: 26 }}>{`function ES5Component(props) {
   return (
     <div style={props.styles}>
       <Content data={props.data} />
@@ -128,7 +152,7 @@ Also Props
     </div>
   )
 }`}</CodeBlock>
-  <CodeBlock>{`const ES6Component = ({ styles, data, user }) =>
+  <CodeBlock style={{ fontSize: 26 }}>{`const ES6Component = ({ styles, data, user }) =>
   <div style={styles}>
     <Content data={data} />
     <Toolbar currUser={user} />
@@ -138,8 +162,13 @@ Also Props
 
 ####
 ```notes
-- You've already seen a little bit of this, BUT  -> Conceptually, components are like JavaScript functions. They accept arbitrary inputs (called “props”) and return a special kind of markup called JSX which is a powerful tool, combining HTML and Javascript to describe what should show up on a page
---
+- Alright, so the most important concept to know to actually build something in react is....
+- CLICK SLIDE
+
+- COMPONENTS!!!!! Conceptually, components are like JavaScript functions. They accept arbitrary inputs (called “props”) which are also important
+- CLICK SLIDE
+- and return a special kind of markup called JSX which is a powerful tool, combining HTML and Javascript to describe what should show up on a page
+- These components will often look like these. They are Functions which accept props (or properties), and return a mix of HTML and Javascript
 ```
 ---
 
@@ -194,54 +223,116 @@ Also Props
   </div></div>
   </Appear>
 </div>
-
+```notes
+- There are actually two types of components in React
+- CLICK SLIDE
+- Functional and Stateful
+- CLICK SLIDE
+- on the Left we have a functional component, much like the few components we've already seen defined in this talk, they look like regular fat arrow Javascript functions
+- on the right we have a component which uses the syntax of an ES6 class. this component is more involved because it can have state, it has lifecycle methods which are functions that execute when the component is rendered, updates, or taken off the page. Furthermore we can define our own methods that manipulate the state of the component
+```
 ---
+Props
 
-<CodeBlock style={{ fontSize: 20 }}>{`const Accordion = ({items, ...props}) =>
-  <BaseAccordion {...props}>
-    {({openIndexes, handleItemClick}) => (
-      <div>
-        {items.map((item, index) => (
-          <AccordionItem key={item.title} direction="vertical">
-            <AccordionButton
-              isOpen={openIndexes.includes(index)}
-              onClick={() => handleItemClick(index)}
-            >
-              {item.title}{' '}
-              <span>{openIndexes.includes(index) ? '👇' : '👈'}</span>
-            </AccordionButton>
-            <AccordionContents isOpen={openIndexes.includes(index)}>
-              {item.contents}
-            </AccordionContents>
-          </AccordionItem>
-        ))}
+<div style={{ display: 'flex' }}>
+<Appear>
+<CodeBlock>{`class App extends React.Component {
+  state = {
+    word: '',
+    wordList: []
+  }\n
+  handleWordChange = (event) => {
+    this.setState({
+      word: event.target.value
+    })
+  }\n
+  handleAddWord = (word) => {
+    this.setState({
+      wordList: [...this.state.wordList, word]
+    })
+  }\n
+  render() {
+    const { word, wordList } = this.state\n
+    return (
+      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <WordList words={wordList} />
+        <Form
+          word={word}
+          handleChange={this.handleWordChange}
+          handleSubmit={this.handleAddWord}
+        />
       </div>
-    )}
-  </BaseAccordion>`}</CodeBlock>
+    )
+  }
+}`}</CodeBlock>
+<div><CodeBlock>{`const WordList = ({ words }) =>
+  <div>
+    <div>This is the list!</div>
+    {words.map(word =>
+      <div key={word}>
+        • {word}
+      </div>)}
+  </div>
+`}</CodeBlock>
+<CodeBlock>{`const Form = ({ word, handleChange, handleSubmit }) =>
+  <div>
+    <input
+      value={word}
+      onChange={handleChange}
+    />
+    <button onClick={() => handleSubmit(word)}>
+      Click me to add!
+    </button>
+  </div>`}</CodeBlock></div>
+</Appear>
+</div>
 
+```notes
+- lets talk about props. What are they, how do they work, and why should I care?!?!
+- I'll tell you... that's a bit aggressive, but I'll tell you
+- Props are arbitrary arguments that can be passed to Components. They can be any data type including primitives, objects, functions, or even components
+- Props are pieces of data that can only be passed one way, from parent to child
+- CLICK SLIDE
+- Right here we have a stateful component, much like the one we saw before, we'll focus at the bottom
+- the WordList and Form components are being passed all the state and the methods (which manipulate the state) that we defined above. this is passing down props in action
+- In these components these props are being defined pulled out in the arguments section (because we know that these functions are being passed props as an object, we can destructure the keys from those objects).
+- those props are being used in the components
+- Now let's see this app in action
+```
+---
+<CodeBlock style={{ fontSize: 50 }}>{`<App />`}</CodeBlock>
+<App />
+
+```notes
+- Well, I didn't tell you that it would be pretty.
+- Either way, this a fully functioning app that utilizes a stateful component to define the app state and pass down methods
+- it also uses functional components with passed down props to define the UI precisely
+```
 ---
 
-## Let's take a look at some basic React
-## Code ↓ ------------- Render ↓
+### Nested Components
+#### Code ↓ --------------------- Render ↓
 <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-  <CodeBlock>
-  {`<CodeBlock style={{
+  <CodeBlock style={{ fontSize: 18 }}>
+  {`<CodeBlock
+  style={{
     fontSize: 26,
     fontStyle: 'oblique'
-  }}>
+  }}
+  options={{ lineNumbers: true }}
+>
   {\`<h1>My code goes here!</h1>\`}
 </CodeBlock>`}
 </CodeBlock>
 
-<CodeBlock style={{ marginTop: 26, fontSize: 26, fontStyle: 'oblique' }}>{`<h1>My code goes here!</h1>`}</CodeBlock>
+<CodeBlock style={{ marginTop: 26, fontSize: 26, fontStyle: 'oblique' }} options={{ lineNumbers: true }}>{`<h1>My code goes here!</h1>`}</CodeBlock>
 
 </div>
 
 
 <Appear>
 Now let's look at the CodeBlock Component
-<CodeBlock>{`import React from 'react'
-import {UnControlled as CodeMirror} from 'react-codemirror2'
+<CodeBlock>{`import {UnControlled as CodeMirror} from 'react-codemirror2'
 \nexport const CodeBlock = ({children, options = {}, style, ...props}) => (
   <div style={{fontSize: 18, overflow: 'scroll', ...style}}>
     <CodeMirror
@@ -257,10 +348,17 @@ import {UnControlled as CodeMirror} from 'react-codemirror2'
     />
   </div>
 )`}</CodeBlock>
+<a href="https://github.com/scniro/react-codemirror2/blob/master/src/index.tsx">https://github.com/scniro/react-codemirror2/blob/master/src/index.tsx</a>
 </Appear>
 
 ```notes
-- Create speaker notes in fenced code blocks
+- Let's go over nested components a little bit more
+- On the left we have some code that will be rendered. The CodeBlock component is being passed a couple props, like a styles object and an options object.
+- On the right we can see that the result of this code is a formatted code block. It has the syntax highlighting of something we would see in an IDE, but it's a little big, and it has a line number attached
+- CLICK SLIDE
+- So you may be wondering what the actual implimentation of CodeBlock looks like
+- It really is a wrapped around another React Component called CodeMirror, which actually comes from a third party library.
+- If you're wondering what *this* component looks like, we can just go in the source code and see
 ```
 
 ---
@@ -268,27 +366,31 @@ import {UnControlled as CodeMirror} from 'react-codemirror2'
 Higher-Order Components
 
 <Appear>
-<CodeBlock>
-  {`const MyStyledComponent = HOCforStyling(MyBoringComponent)
-const MyStyledAsyncComponent = HOCforAsync(MyStyledComponent)`}
+<div><CodeBlock style={{ fontSize: 30 }}>
+  {`const MyStyledComponent = Styling(MyBoringComponent)
+const MyStyledAsyncComponent = Async(MyStyledComponent)`}
 </CodeBlock>
 OR
-<CodeBlock>
-{`const MyStyledAsyncComponent = HOCforAsync(HOCforStyling(MyBoringComponent))`}</CodeBlock>
+<CodeBlock style={{ fontSize: 30 }}>
+{`const MyStyledAsyncComponent = Async(Styling(MyBoringComponent))`}</CodeBlock>
 OR
-<CodeBlock>{`
+<CodeBlock style={{ fontSize: 30 }}>{`
 const makeStyledAndAsyc = compose(
-  HOCforAsync,
-  HOCforStyling
+  Async,
+  Styling
 )
 const MyStyledAsyncComponent = makeStyledAndAsyc(MyBoringComponent)`}
-</CodeBlock>
+</CodeBlock></div>
 
 
 </Appear>
 
 ```notes
-- This is a function that wraps a component and returns a new component
+- So that was a really quick overview of what I would consider the "basics" of React to be, and now we're getting into questions of reausability and readability
+- you might be finding yourself repeating code often if your're using only the basics, for example you might be using the same styles over and over again, or you might be repeatedly calling a certain endpoint when a component renders
+- luckily some *bearded hipsters* in san francisco found a solution, call High Order Components or HOCS
+- CLICK SLIDE
+-
 ```
 
 ---
@@ -398,23 +500,23 @@ export default Split
 
 <CodeBlock>{`const ProviderComponent = ({ render }) => render({
     name: 'Jeremy',
-    company: 'Slalom',
-    rating: 10
+    adjective: 'favorite',
+    food: 'ramen',
   })\n
-<ProviderComponent render={({name, company, rating}) =>
+<ProviderComponent render={({name, adjective, food}) =>
   <div>
-    My name is {name} and I would rate {company} as a {rating} out of 10
+    My name is {name} and my {adjective} food is {food}
   </div>}
 />`}</CodeBlock>
 <Appear>
 <div>Renders:</div>
-<div>My name is Jeremy and I would rate Slalom as a 10 out of 10</div>
+<div>My name is Jeremy and my favorite food is ramen</div>
 </Appear>
 
 ---
 <div><div style={{ fontSize: 40 }}>Do render props cause callback hell?</div></div>
 <Appear>
-<CodeBlock>{`const verifyUser = function(username, password, callback){
+<div><CodeBlock style={{ fontSize: 18 }}>{`const verifyUser = function(username, password, callback){
    dataBase.verifyUser(username, password, (error, userInfo) => {
        if (error) {
            callback(error)
@@ -434,8 +536,8 @@ export default Split
            })
        }
    })
-};`}</CodeBlock>
-<CodeBlock>{`<ProviderComponent render={({name, company, rating}) =>
+};`}</CodeBlock></div>
+<div><CodeBlock>{`<ProviderComponent render={({name, company, rating}) =>
   <SecondProviderComponent render={({ someMethod, someObject }) =>
     <ThirdProviderComponent render={({ bottomText }) =>
       <div>
@@ -445,6 +547,6 @@ export default Split
       </div>
     } />
   } />
-} />`}</CodeBlock>
+} />`}</CodeBlock></div>
 <div><div style={{ fontSize: 40 }}>So basically yes, they can</div></div>
 </Appear>
