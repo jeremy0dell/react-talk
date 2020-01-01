@@ -6,7 +6,6 @@ export default class App extends React.Component {
     wordList: []
   }
   handleWordChange = (event) => {
-    console.log('HIII', event.target.value)
     this.setState({
       word: event.target.value
     })
