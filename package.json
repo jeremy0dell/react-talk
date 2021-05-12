@@ -20,7 +20,7 @@
   "name": "sl-react-talk",
   "main": "theme.js",
   "dependencies": {
-    "codemirror": "^5.39.2",
+    "codemirror": "^5.58.2",
     "react-codemirror2": "^5.1.0"
   }
 }
