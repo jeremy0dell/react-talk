@@ -13,9 +13,9 @@
   "author": "Brent Jackson",
   "license": "MIT",
   "devDependencies": {
-    "mdx-deck": "^1.6.7",
-    "style-loader": "^0.22.1",
-    "css-loader": "^1.0.0"
+    "mdx-deck": "^1.10.2",
+    "style-loader": "^3.3.1",
+    "css-loader": "^6.7.3"
   },
   "name": "sl-react-talk",
   "main": "theme.js",
